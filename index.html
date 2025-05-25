@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="search-container">
+        <h3>Search:</h3>
+        <form class="search-form" action="">
+          <label>Title: <input class="title-search" type="text" /></label>
+          <label
+            >Type:
+            <select class="type-select" name="" id="">
+              <option hidden selected disabled value=""></option>
+              <option value="movie">Movie</option>
+              <option value="series">Series</option>
+              <option value="episode">Episode</option>
+            </select>
+          </label>
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div class="container">
+        <h3 class="films-title">Films:</h3>
+        <h4 class="loading">Loading...</h4>
+        <ul class="result-container"></ul>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
