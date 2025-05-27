@@ -1,5 +1,7 @@
 import "./style.css";
 import axios from "axios";
+import * as basicLightbox from "basiclightbox";
+import "basiclightbox/dist/basicLightbox.min.css";
 
 class MovieService {
   async search(title, type, page) {
@@ -15,8 +17,6 @@ class MovieService {
     const { data: movieInfo } = await axios.get(
       `http://www.omdbapi.com/?apikey=b14a1940&i=${movieId}`
     );
-
-    console.log(movieInfo);
     return movieInfo;
   }
 }
@@ -32,7 +32,7 @@ class MovieUi {
     this.filmsTitle = filmsTitle;
   }
 
-  renderMovies(movies) {
+  renderMovies(movies, movieInfo) {
     this.searchForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -46,7 +46,13 @@ class MovieUi {
         this.moviesArr = await movies(title, type, this.page);
         console.log(this.moviesArr);
         this.moviesArr.forEach(
-          ({ Title: title, Year: year, Poster: poster, Type, imdbID }) => {
+          async ({
+            Title: title,
+            Year: year,
+            Poster: poster,
+            Type,
+            imdbID: filmId,
+          }) => {
             const movieContainer = document.createElement("li");
             const details = document.createElement("button");
             const filmYear = document.createElement("div");
@@ -57,6 +63,32 @@ class MovieUi {
             filmName.textContent = title;
             filmYear.textContent = year;
             img.src = poster;
+
+            const movieInfoObj = await movieInfo(filmId);
+            const {
+              Released: released,
+              Genre: genre,
+              Country: country,
+              Director: director,
+              Writer: writer,
+            } = movieInfoObj;
+            console.log(movieInfoObj);
+            const instance = basicLightbox.create(
+              `<div class='info-container'><div>${img.outerHTML}</div>
+               <ul>
+              <li><h3>Title:</h3>${title}</li>
+              <li><h3>Released:</h3>${released}</li>
+              <li><h3>Genre:</h3>${genre}</li>
+              <li><h3>Country:</h3>${country}</li>
+              <li><h3>Director:</h3>${director}</li>
+              <li><h3>Writer:</h3>${writer}</li>
+
+              </ul>
+              </div>`
+            );
+            details.addEventListener("click", async () => {
+              instance.show();
+            });
 
             movieContainer.append(img);
             movieContainer.append(filmName);
@@ -87,11 +119,24 @@ class MovieApp {
   loadMovies(title, type, page) {
     return this.movieService.search(title, type, page);
   }
+
+  loadMovieInfo(movieId) {
+    return this.movieService.getMovie(movieId);
+  }
   init() {
     // this.movieService.getMovie("tt1528854");
-    this.movieUi.renderMovies(this.loadMovies.bind(this));
+    this.movieUi.renderMovies(
+      this.loadMovies.bind(this),
+      this.loadMovieInfo.bind(this)
+    );
   }
 }
 
 const app = new MovieApp();
 app.init();
+
+// const a = document.createElement("h1");
+// a.textContent = "hkasygdj";
+
+// const instance = basicLightbox.create(`${a.outerHTML}`);
+// instance.show(console.log(a));

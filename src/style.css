@@ -76,3 +76,36 @@ img {
 .films-title {
   display: none;
 }
+
+/* .basicLightbox__placeholder {
+  background-color: red;
+} */
+
+.info-container {
+  background-color: white;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
+}
+
+.info-container img {
+  height: 500px;
+  border-radius: 0px;
+}
+
+.info-container ul {
+  display: grid;
+  grid-template-columns: auto;
+  gap: 0;
+}
+
+.info-container ul li {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.info-container ul li h3 {
+  margin: 0;
+}
